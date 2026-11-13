@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>วิเคราะห์เปรียบเทียบร่าง พ.ร.บ.ประกันสังคม: พรรคประชาชน vs กระทรวงแรงงาน</title>
+  <style>
+    :root {
+      --primary-blue: #1e3a8a;
+      --accent-orange: #ea580c;
+      --gov-teal: #0f766e;
+      --bg-neutral: #f8fafc;
+      --card-bg: #ffffff;
+      --text-dark: #1e293b;
+      --text-muted: #64748b;
+      --border-color: #e2e8f0;
+      --tag-gray: #f1f5f9;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+      --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Sarabun", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--bg-neutral);
+      color: var(--text-dark);
+      line-height: 1.6;
+      padding: 20px 12px;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    header {
+      background: linear-gradient(135deg, #1e293b, #0f172a);
+      color: #fff;
+      padding: 32px 24px;
+      border-radius: 12px;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow-md);
+    }
+
+    header h1 {
+      font-size: 1.65rem;
+      font-weight: 700;
+      line-height: 1.35;
+      margin-bottom: 12px;
+    }
+
+    .persona-badge {
+      display: inline-flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .badge {
+      font-size: 0.825rem;
+      padding: 4px 10px;
+      border-radius: 9999px;
+      font-weight: 500;
+    }
+
+    .badge-primary { background-color: #38bdf8; color: #082f49; }
+    .badge-secondary { background-color: #cbd5e1; color: #1e293b; }
+    .badge-warning { background-color: #fed7aa; color: #7c2d12; }
+
+    .summary-card {
+      background: var(--card-bg);
+      border-left: 5px solid var(--primary-blue);
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .summary-card h2 {
+      font-size: 1.15rem;
+      margin-bottom: 8px;
+      color: var(--primary-blue);
+    }
+
+    /* Comparison Grid */
+    .comparison-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+
+    @media (min-width: 840px) {
+      .comparison-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    .draft-card {
+      background: var(--card-bg);
+      border-radius: 10px;
+      padding: 24px;
+      border: 1px solid var(--border-color);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .draft-card.gov { border-top: 4px solid var(--gov-teal); }
+    .draft-card.party { border-top: 4px solid var(--accent-orange); }
+
+    .draft-card h3 {
+      font-size: 1.25rem;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .gov-title { color: var(--gov-teal); }
+    .party-title { color: var(--accent-orange); }
+
+    .draft-subtitle {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+    }
+
+    /* Detailed Matrix Section */
+    .section-title {
+      font-size: 1.35rem;
+      font-weight: 700;
+      margin: 32px 0 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-bottom: 2px solid var(--border-color);
+      padding-bottom: 8px;
+    }
+
+    .topic-card {
+      background: var(--card-bg);
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 18px;
+      border: 1px solid var(--border-color);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .topic-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .topic-number {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #fff;
+      background: var(--primary-blue);
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 8px;
+    }
+
+    .topic-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+    }
+
+    .topic-body {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+
+    @media (min-width: 768px) {
+      .topic-body {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    .topic-col {
+      padding: 14px;
+      border-radius: 8px;
+      font-size: 0.95rem;
+    }
+
+    .col-gov {
+      background-color: #f0fdfa;
+      border: 1px solid #ccfbf1;
+    }
+
+    .col-party {
+      background-color: #fff7ed;
+      border: 1px solid #ffedd5;
+    }
+
+    .col-title {
+      font-weight: 700;
+      font-size: 0.9rem;
+      margin-bottom: 6px;
+      display: block;
+    }
+
+    .col-gov .col-title { color: var(--gov-teal); }
+    .col-party .col-title { color: var(--accent-orange); }
+
+    .tag-benefit {
+      display: inline-block;
+      font-size: 0.78rem;
+      padding: 2px 8px;
+      border-radius: 4px;
+      margin-bottom: 6px;
+      font-weight: 600;
+    }
+
+    .benefit-gov { background: #14b8a6; color: white; }
+    .benefit-party { background: #f97316; color: white; }
+
+    ul.bullet-list {
+      padding-left: 18px;
+      margin-top: 6px;
+    }
+
+    ul.bullet-list li {
+      margin-bottom: 6px;
+    }
+
+    .takeaway-box {
+      background: #eff6ff;
+      border: 1px dashed #3b82f6;
+      border-radius: 8px;
+      padding: 16px;
+      margin-top: 12px;
+      font-size: 0.925rem;
+    }
+
+    .takeaway-title {
+      font-weight: bold;
+      color: #1d4ed8;
+      margin-bottom: 4px;
+    }
+
+    .table-container {
+      overflow-x: auto;
+      margin-top: 20px;
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #ffffff;
+      font-size: 0.925rem;
+      text-align: left;
+    }
+
+    th, td {
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--border-color);
+      vertical-align: top;
+    }
+
+    th {
+      background-color: #f1f5f9;
+      font-weight: 700;
+      color: var(--text-dark);
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    footer {
+      text-align: center;
+      font-size: 0.825rem;
+      color: var(--text-muted);
+      margin-top: 40px;
+      padding: 16px 0;
+      border-top: 1px solid var(--border-color);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <header>
+      <h1>เปรียบเทียบผลประโยชน์ พ.ร.บ. ประกันสังคม</h1>
+      <p>การวิเคราะห์เชิงลึก: ร่างกระทรวงแรงงาน (เสนอ ครม.) vs ร่างพรรคประชาชน (สภาฯ เสนอ ม.77)</p>
+      <div class="persona-badge">
+        <span class="badge badge-primary">ผู้ประกันตน มาตรา 33</span>
+        <span class="badge badge-secondary">พนักงานมหาวิทยาลัย / เจ้าหน้าที่รัฐ สังกัดกระทรวง อว.</span>
+        <span class="badge badge-warning">อายุ &gt; 45 ปี (ระยะเตรียมตัวเกษียณ 10–15 ปี)</span>
+      </div>
+    </header>
+
+    <!-- Context Context Card -->
+    <section class="summary-card">
+      <h2>บริบทเฉพาะของกลุ่มเป้าหมาย (พนักงานมหาวิทยาลัย/จนท. อว. อายุ 45+)</h2>
+      <p>
+        กลุ่มนี้มีลักษณะเฉพาะคือ <strong>1) เงินเดือนเกินเพดานประกันสังคม (เกิน 15,000 บาท) แทบทุกคน</strong> ทำให้จ่ายเงินสมทบเต็มเพดานมาอย่างต่อเนื่อง
+        <strong>2) เหลือระยะเวลาทำงานอีกไม่ถึง 10-15 ปีจะเกษียณ (อายุ 55-60 ปี)</strong> 
+        <strong>3) มักมีกองทุนสำรองเลี้ยงชีพ (PVD) คู่ขนาน</strong> แต่ไม่มีระบบบำนาญข้าราชการ (กบข.) และ
+        <strong>4) มีแนวโน้มจ้างงานต่อหลังอายุ 60 ปี</strong> (เช่น อาจารย์สัญญาจ้างพิเศษ, ที่ปรึกษา, หรือลูกจ้างโครงการวิจัย)
+      </p>
+    </section>
+
+    <!-- Detailed Point-by-Point Matrix -->
+    <h2 class="section-title">วิเคราะห์ผลดีแยกเป็นข้อๆ ต่อพนักงานมหาวิทยาลัย อว. (อายุ 45+)</h2>
+
+    <!-- Topic 1 -->
+    <div class="topic-card">
+      <div class="topic-header">
+        <div class="topic-title">
+          <span class="topic-number">1</span>
+          การบริหารเงินชราภาพ และสภาพคล่องยามจำเป็น (มาตรการ 3 ขอ vs การันตีสูตรบำนาญ)
+        </div>
+      </div>
+      <div class="topic-body">
+        <div class="topic-col col-gov">
+          <span class="tag-benefit benefit-gov">จุดเด่นของร่างกระทรวงแรงงาน</span>
+          <span class="col-title">มี "มาตรการ 3 ขอ" (ขอเลือก / ขอคืน / ขอกู้)</span>
+          <ul class="bullet-list">
+            <li><strong>ขอเลือก (บำเหน็จ vs บำนาญ):</strong> เมื่อครบ 55 ปี แม้ส่งเกิน 180 เดือน ก็มีสิทธิขอรับเงินก้อน (บำเหน็จ) ได้ ซึ่งพนักงานมหาวิทยาลัยบางส่วนต้องการเงินก้อนไปรวมกับ PVD เพื่อปิดหนี้บ้าน/สหกรณ์ หรือลงทุนส่วนตัว</li>
+            <li><strong>ขอกู้:</strong> สามารถนำเงินชราภาพสะสมไปเป็นหลักประกันเงินกู้กับสถาบันการเงินได้ ช่วยลดต้นทุนดอกเบี้ยในวัย 45+ ที่ยังมีภาระค่าผ่อนบ้านหรือค่าเล่าเรียนบุตรระดับอุดมศึกษา</li>
+            <li><strong>ขอคืน:</strong> นำเงินสะสมชราภาพบางส่วนออกมาใช้ก่อนอายุ 55 ปีได้หากเกิดวิกฤตเศรษฐกิจหรือภัยพิบัติ</li>
+          </ul>
+        </div>
+        <div class="topic-col col-party">
+          <span class="tag-benefit benefit-party">จุดเด่นของร่างพรรคประชาชน</span>
+          <span class="col-title">เน้นความยั่งยืนของกองทุน + ปรับสูตรบำนาญที่เป็นธรรม</span>
+          <ul class="bullet-list">
+            <li><strong>ปกป้องเงินเกษียณไม่ให้รั่วไหล:</strong> ปฏิเสธการดึงเงินก้อนออกมาก่อน (คัดค้าน 3 ขอ) เพื่อป้องกันไม่ให้กองทุนชราภาพเสี่ยงล้มละลายในวันที่กลุ่มอายุ 45+ ก้าวเข้าสู่วัยเกษียณจริงในอีก 10 ปีข้างหน้า</li>
+            <li><strong>ปรับสูตรคำนวณบำนาญ:</strong> ทบทวนการใช้เกณฑ์ "ค่าจ้างเฉลี่ย 60 เดือนสุดท้าย" โดยเปลี่ยนมาคำนวณแบบถ่วงน้ำหนักตลอดอายุการทำงานหรือปรับตามอัตราเงินเฟ้อ ทำให้ผู้ที่ทำงานมานานได้รับเงินบำนาญรายเดือนที่คุ้มค่ากว่าเดิม</li>
+          </ul>
+        </div>
+      </div>
+      <div class="takeaway-box">
+        <div class="takeaway-title">สรุปผลดีต่อคนอายุ 45+:</div>
+        <strong>ร่าง ก.แรงงาน</strong> ให้ความยืดหยุ่นทางการเงินระยะสั้นถึงกลาง (ได้สิทธิเลือกเงินก้อน/นำไปค้ำกู้) ส่วน <strong>ร่างพรรคประชาชน</strong> ให้ความมั่นคงว่า "เงินกองทุนจะไม่หมดก่อนได้ใช้" และได้บำนาญรายเดือนที่สูงขึ้นตามระยะเวลาทำงานจริง
+      </div>
+    </div>
+
+    <!-- Topic 2 -->
+    <div class="topic-card">
+      <div class="topic-header">
+        <div class="topic-title">
+          <span class="topic-number">2</span>
+          การทำงานต่อเนื่องหลังอายุเกษียณ (อายุ 60 ปีขึ้นไป)
+        </div>
+      </div>
+      <div class="topic-body">
+        <div class="topic-col col-gov">
+          <span class="tag-benefit benefit-gov">ร่างกระทรวงแรงงาน</span>
+          <span class="col-title">ขยายเกณฑ์อายุ + รับบำนาญแล้วกลับมาเป็นผู้ประกันตนได้</span>
+          <ul class="bullet-list">
+            <li><strong>ขยายอายุสูงสุด:</strong> ขยายอายุผู้ประกันตนที่มีสถานะลูกจ้างเกินกว่า 60 ปี ให้ยังคงได้รับความคุ้มครองต่อเนื่อง</li>
+            <li><strong>ผู้รับบำนาญกลับมาส่ง ม.39/1 ได้:</strong> หากอาจารย์/นักวิจัยเกษียณอายุ 60 ปีและเริ่มรับบำนาญชราภาพแล้ว หากมหาวิทยาลัยจ้างงานต่อ ก็สามารถสมัครเข้าสู่ระบบประกันสังคมเพื่อรับสิทธิการรักษาพยาบาลต่อได้โดย<strong>ไม่ตัดสิทธิเงินบำนาญชราภาพ</strong>ที่รับอยู่</li>
+          </ul>
+        </div>
+        <div class="topic-col col-party">
+          <span class="tag-benefit benefit-party">ร่างพรรคประชาชน</span>
+          <span class="col-title">ขยายสิทธิลูกจ้างภาครัฐ/พนักงานชั่วคราวให้เท่าเทียม</span>
+          <ul class="bullet-list">
+            <li>มุ่งเน้นการคุ้มครองแรงงานภาครัฐ ลูกจ้างสัญญาจ้างโครงการ และพนักงานในสถาบันอุดมศึกษา ให้ได้รับสิทธิประโยชน์พื้นฐานเทียบเท่าแรงงานภาคเอกชน</li>
+            <li>ขยายการครอบคลุมกรณีที่มหาวิทยาลัยจ้างงานแบบโครงการหรือสัญญาจ้างระยะสั้นหลังเกษียณ ให้มีหลักประกันทางสังคมไม่ขาดตอน</li>
+          </ul>
+        </div>
+      </div>
+      <div class="takeaway-box">
+        <div class="takeaway-title">สรุปผลดีต่อคนอายุ 45+:</div>
+        <strong>ร่าง ก.แรงงาน ตอบโจทย์กลุ่มอาจารย์/นักวิจัยวัยเกษียณอย่างชัดเจนมาก</strong> เพราะพนักงานมหาวิทยาลัยจำนวนมากได้รับการต่อสัญญาแบบปีต่อปีหลังอายุ 60 การได้รับบำนาญชราภาพควบคู่ไปกับสิทธิรักษาพยาบาลประกันสังคม ถือเป็นผลประโยชน์ที่จับต้องได้ทันที
+      </div>
+    </div>
+
+    <!-- Topic 3 -->
+    <div class="topic-card">
+      <div class="topic-header">
+        <div class="topic-title">
+          <span class="topic-number">3</span>
+          การปรับเพดานเงินเดือน (Wage Cap) และสิทธิประโยชน์เงินชดเชย
+        </div>
+      </div>
+      <div class="topic-body">
+        <div class="topic-col col-gov">
+          <span class="tag-benefit benefit-gov">ร่างกระทรวงแรงงาน</span>
+          <span class="col-title">คงเพดานตามขั้นตอนเดิม และปรับเพิ่มสิทธิประโยชน์เฉพาะจุด</span>
+          <ul class="bullet-list">
+            <li>เพิ่มเงินสงเคราะห์คลอดบุตร และค่าทดแทนกรณีทุพพลภาพ</li>
+            <li>การปรับฐานเงินเดือนสูงสุด (15,000 บาท) เป็นไปตามแผนการทยอยปรับปรุงของสำนักงานประกันสังคมตามรอบกฎกระทรวง</li>
+            <li>สำหรับคนอายุ 45+ ที่ส่งเพดาน 15,000 บาทมานาน เงินสมทบจะไม่กระโดดเพิ่มในทันที ภาระหักเงินเดือนยังเท่าเดิม</li>
+          </ul>
+        </div>
+        <div class="topic-col col-party">
+          <span class="tag-benefit benefit-party">ร่างพรรคประชาชน</span>
+          <span class="col-title">ผลักดันปรับเพดานค่าจ้างขั้นสูงให้สะท้อนรายได้จริง</span>
+          <ul class="bullet-list">
+            <li><strong>เพิ่มเพดานสมทบ (เช่น ขยับเป็น 17,500 - 23,000 บาท):</strong> พนักงานมหาวิทยาลัยฐานเงินเดือนส่วนใหญ่ 25,000 - 60,000 บาทขึ้นไป จะต้องจ่ายสมทบเพิ่มขึ้น</li>
+            <li><strong>ผลดีที่ได้รับกลับมา:</strong> ฐานเงินคำนวณบำนาญชราภาพจะสูงขึ้นอย่างมีนัยสำคัญ และเงินชดเชยกรณีเลิกจ้าง/ไม่ต่อสัญญาจ้าง (ว่างงาน) จะได้เงินรายเดือนสูงขึ้นตามฐานเงินเดือนจริง</li>
+          </ul>
+        </div>
+      </div>
+      <div class="takeaway-box">
+        <div class="takeaway-title">สรุปผลดีต่อคนอายุ 45+:</div>
+        ถ้าเหลือเวลาส่งอีก 10 ปี การปรับเพดานเงินสมทบใน <strong>ร่างพรรคประชาชน</strong> จะทำให้เงินก้อนบำนาญเกษียณรายเดือนที่จะได้รับตอนอายุ 55-60 ปี เพิ่มขึ้นอย่างมาก (แม้จะต้องจ่ายเงินสมทบรายเดือนเพิ่มขึ้นก็ตาม) ขณะที่ร่าง ก.แรงงาน เน้นไม่สร้างภาระค่าใช้จ่ายรายเดือนเพิ่มขึ้น
+      </div>
+    </div>
+
+    <!-- Topic 4 -->
+    <div class="topic-card">
+      <div class="topic-header">
+        <div class="topic-title">
+          <span class="topic-number">4</span>
+          ธรรมาภิบาล บอร์ดประกันสังคม และความโปร่งใสของเงินกองทุน
+        </div>
+      </div>
+      <div class="topic-body">
+        <div class="topic-col col-gov">
+          <span class="tag-benefit benefit-gov">ร่างกระทรวงแรงงาน</span>
+          <span class="col-title">ปรับปรุงสัดส่วนกรรมการและคุณสมบัติตามสายบริหาร</span>
+          <ul class="bullet-list">
+            <li>ปรับปรุงคุณสมบัติและลักษณะต้องห้ามของบอร์ด ประกันสังคม คณะกรรมการแพทย์ และคณะกรรมการอุทธรณ์</li>
+            <li>เพิ่มระบบการตรวจสอบบัญชีโดยผู้ตรวจบัญชีรับอนุญาตภายนอก เพื่อสร้างความเชื่อมั่นในการบริหารทรัพย์สิน</li>
+          </ul>
+        </div>
+        <div class="topic-col col-party">
+          <span class="tag-benefit benefit-party">ร่างพรรคประชาชน</span>
+          <span class="col-title">ยึดหลัก "1 ผู้ประกันตน 1 เสียง" และเปิดเผยข้อมูลเชิงรุก</span>
+          <ul class="bullet-list">
+            <li><strong>เลือกตั้งบอร์ดประกันสังคมโดยตรง:</strong> กำหนดที่มาของตัวแทนผู้ประกันตนจากการเลือกตั้งที่โปร่งใส เปิดโอกาสให้บุคลากรสายวิชาการ/พนักงานมหาวิทยาลัยเข้าไปมีส่วนร่วมตรวจสอบนโยบายการลงทุนได้</li>
+            <li><strong>การเปิดเผยพอร์ตการลงทุน (Transparency):</strong> เปิดเผยข้อมูลการลงทุนของกองทุนกว่า 2 ล้านล้านบาท เพื่อป้องกันการนำเงินไปลงทุนในโครงการที่ขาดทุนหรือไม่มีประสิทธิภาพ</li>
+          </ul>
+        </div>
+      </div>
+      <div class="takeaway-box">
+        <div class="takeaway-title">สรุปผลดีต่อคนอายุ 45+:</div>
+        พนักงานมหาวิทยาลัย อว. ซึ่งเป็นกลุ่มที่มีความรู้ความเข้าใจเรื่องการเงินและการลงทุนสูง จะได้ประโยชน์จาก <strong>ร่างพรรคประชาชน</strong> ในแง่การตรวจสอบความโปร่งใส ทำให้มั่นใจว่าเงินสมทบสะสมชราภาพที่ส่งมากว่า 20 ปี จะได้รับการนำไปลงทุนอย่างมีผลตอบแทนสูงสุดและไร้การแทรกแซงทางการเมือง
+      </div>
+    </div>
+
+    <!-- Summary Comparison Table -->
+    <h2 class="section-title">ตารางสรุปเปรียบเทียบความคุ้มค่า (สำหรับ พมศ. / จนท. อว. อายุ 45+)</h2>
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th style="width: 25%;">ประเด็นสำคัญ</th>
+            <th style="width: 37.5%; color: var(--gov-teal);">ร่างของกระทรวงแรงงาน</th>
+            <th style="width: 37.5%; color: var(--accent-orange);">ร่างของพรรคประชาชน</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>ความยืดหยุ่นเงินชราภาพ</strong></td>
+            <td><strong>ดีเด่นมาก:</strong> มีสิทธิเลือกรับเงินก้อน (บำเหน็จ) หรือนำสิทธิไปค้ำประกันเงินกู้ธนาคารเพื่อบริหารหนี้สินก่อนเกษียณได้</td>
+            <td><strong>จำกัด:</strong> ล็อกเงินไว้จ่ายเป็นบำนาญรายเดือนเท่านั้น ไม่อนุญาตให้ถอนเงินออกมาก่อนเพื่อป้องกันกองทุนชราภาพทรุดตัว</td>
+          </tr>
+          <tr>
+            <td><strong>ความยั่งยืนของเงินบำนาญ</strong></td>
+            <td><strong>มีความเสี่ยง:</strong> การเปิดให้ขอคืน/ขอกู้ อาจกระทบต่อสภาพคล่องของกองทุนชราภาพในระยะยาวหากสมาชิกใช้สิทธิจำนวนมาก</td>
+            <td><strong>ดีเด่นมาก:</strong> ออกแบบเพื่อการรักษาสภาพคล่องกองทุนระยะยาว พร้อมสูตรคำนวณบำนาญที่คำนึงถึงเงินเฟ้อ</td>
+          </tr>
+          <tr>
+            <td><strong>การจ้างงานต่อหลังอายุ 60</strong></td>
+            <td><strong>ตรงจุด:</strong> ได้รับบำนาญแล้วยังกลับมาขึ้นทะเบียน ม.39/1 รับสิทธิรักษาพยาบาลต่อได้ เหมาะกับอาจารย์/นักวิจัยต่อสัญญา</td>
+            <td>เน้นการคุ้มครองการจ้างงานและสัญญาจ้างที่เป็นธรรมในภาพรวม แต่ยังไม่มีโมเดลแยกเงินบำนาญออกจากสิทธิรักษาพยาบาลชัดเจนเท่า</td>
+          </tr>
+          <tr>
+            <td><strong>ขนาดของเงินบำนาญรายเดือน</strong></td>
+            <td>คงอัตราฐานเดิม (ขึ้นอยู่กับการทยอยปรับเพดานตามประกาศกระทรวง)</td>
+            <td><strong>มีโอกาสได้สูงขึ้นมาก:</strong> จากการปรับฐานเพดานค่าจ้างขั้นสูงให้สอดคล้องกับเงินเดือนจริงของบุคลากรอุดมศึกษา</td>
+          </tr>
+          <tr>
+            <td><strong>การมีส่วนร่วมและตรวจสอบ</strong></td>
+            <td>เน้นกลไกคณะกรรมการระดับกระทรวงและการตรวจสอบบัญชีภายนอกตามระเบียบราชการ</td>
+            <td><strong>เปิดกว้าง:</strong> ผลักดันระบบเลือกตั้งบอร์ด 1 คน 1 เสียง และเปิดเผยข้อมูลพอร์ตลงทุนแบบ Real-time</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Final Recommendation -->
+    <div class="summary-card" style="margin-top: 30px; border-left-color: var(--accent-orange);">
+      <h2>บทวิเคราะห์สังเคราะห์: ร่างไหนให้ผลดีกว่ากัน?</h2>
+      <p style="margin-bottom: 10px;">
+        สำหรับ <strong>เจ้าหน้าที่รัฐ/พนักงานมหาวิทยาลัย สังกัดกระทรวง อว. อายุเกิน 45 ปี</strong> ขึ้นอยู่กับเป้าหมายทางการเงินส่วนบุคคล:
+      </p>
+      <ul class="bullet-list">
+        <li><strong>หากท่านต้องการ "สภาพคล่อง และทางเลือกการเกษียณที่ยืดหยุ่น":</strong> ร่างของ <strong>กระทรวงแรงงาน</strong> ตอบโจทย์ชีวิตจริงมากกว่า เพราะช่วยให้ท่านมีสิทธิเลือกนำเงินก้อนชราภาพมาปิดหนี้สินบ้าน/สหกรณ์ หรือใช้สิทธิค้ำประกันเงินกู้เพื่อลดดอกเบี้ย และที่สำคัญที่สุดคือ เมื่อเกษียณอายุ 60 ปีแล้วได้ต่อสัญญาจ้างในมหาวิทยาลัย ท่านสามารถรับเงินบำนาญไปพร้อมกับการใช้สิทธิรักษาพยาบาลต่อได้</li>
+        <li><strong>หากท่านต้องการ "ความมั่นคงของกองทุน และบำนาญรายเดือนมูลค่าสูงขึ้น":</strong> ร่างของ <strong>พรรคประชาชน</strong> จะปกป้องเงินเกษียณของท่านจากการขาดสภาพคล่องในอีก 10 ปีข้างหน้า และทำให้บุคลากร อว. ซึ่งมีฐานเงินเดือนสูงได้รับเงินบำนาญต่อเดือนที่สมน้ำสมเนื้อกับเงินเดือนจริงที่ทำสะสมมาทั้งชีวิตการทำงาน</li>
+      </ul>
+    </div>
+
+    <footer>
+      เอกสารวิเคราะห์เปรียบเทียบเชิงวิชาการเพื่อประกอบการพิจารณาร่างกฎหมายประกันสังคม | ข้อมูลอ้างอิงจาก ร่าง พ.ร.บ. สภาผู้แทนราษฎร (ม.77) และ หนังสือ สลค. กระทรวงแรงงาน
+    </footer>
+  </div>
+
+  <script>
+    (function() {
+      // Safe, isolated script for UI interaction if needed
+      document.addEventListener('DOMContentLoaded', function() {
+        console.log("Comparative analysis rendered safely.");
+      });
+    })();
+  </script>
+</body>
+</html>
