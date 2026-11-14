@@ -3,8 +3,6 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- [Security Fix 1] กำหนด Content Security Policy (CSP) และ Referrer Policy เพื่อป้องกัน XSS และการรั่วไหลของข้อมูล -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; img-src 'self' data:; base-uri 'none'; form-action 'none';">
   <meta name="referrer" content="no-referrer">
   <title>เอกสารวิเคราะห์เปรียบเทียบร่าง พ.ร.บ. ประกันสังคม: กระทรวงแรงงาน และ พรรคประชาชน</title>
   <style>
@@ -36,12 +34,6 @@
       --pp-pastel-bar: #f7ad72;
       --pp-badge-bg: #ffedd5;
       --pp-text-strong: #9a3b12;
-
-      /* Security Audit Theme (โทนสีเขียวพาสเทลสำหรับรายงานความปลอดภัย) */
-      --sec-bg: #f0fdf4;
-      --sec-border: #bbf7d0;
-      --sec-text: #166534;
-      --sec-bar: #4ade80;
 
       /* Neutral UI Controls */
       --control-active-bg: #eef2f6;
@@ -681,52 +673,8 @@
     .col-28 { width: 28%; }
     .col-39 { width: 39%; }
 
-    /* Security Audit Report Panel */
-    .security-audit-panel {
-      background-color: var(--sec-bg);
-      border: 1px solid var(--sec-border);
-      border-top: 5px solid var(--sec-bar);
-      border-radius: var(--radius-lg);
-      padding: 24px;
-      margin-top: 48px;
-      box-shadow: var(--shadow-subtle);
-    }
-
-    .security-audit-panel h2 {
-      font-size: 1.2rem;
-      color: var(--sec-text);
-      margin-bottom: 12px;
-    }
-
-    .security-grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 14px;
-      margin-top: 14px;
-    }
-
-    @media (min-width: 768px) {
-      .security-grid {
-        grid-template-columns: 1fr 1fr;
-      }
-    }
-
-    .sec-item {
-      background: #ffffff;
-      border: 1px solid var(--sec-border);
-      border-radius: var(--radius-md);
-      padding: 14px 16px;
-      font-size: 0.88rem;
-    }
-
-    .sec-item strong {
-      color: var(--sec-text);
-      display: block;
-      margin-bottom: 4px;
-    }
-
     footer {
-      margin-top: 44px;
+      margin-top: 56px;
       padding-top: 24px;
       border-top: 1px solid var(--border-strong);
       text-align: center;
@@ -1065,30 +1013,6 @@
       </div>
     </section>
 
-    <!-- SECURITY AUDIT SUMMARY SECTION -->
-    <section class="security-audit-panel" aria-label="สรุปรายงานการตรวจสอบและปรับปรุงความปลอดภัยของโค้ด">
-      <h2>สรุปผลการตรวจสอบและปรับปรุงมาตรฐานความปลอดภัย (Security Audit Report สำหรับเผยแพร่บน GitHub)</h2>
-      <p style="font-size: 0.92rem;">โค้ดฉบับนี้ได้รับการปรับปรุงแก้ไขให้เป็นไปตามมาตรฐานความปลอดภัยของเว็บแอปพลิเคชัน (OWASP Top 10) โดยมีรายละเอียดการแก้ไขและเหตุผลดังต่อไปนี้:</p>
-      <div class="security-grid">
-        <div class="sec-item">
-          <strong>1. ยกเลิกการใช้ .innerHTML และแทนที่ด้วย Safe DOM APIs</strong>
-          เหตุผล: เดิมมีการใช้ <code>ageDetailView.innerHTML</code> และ <code>simOutput.innerHTML</code> ในการสร้าง HTML จากตัวแปร ซึ่งเสี่ยงต่อช่องโหว่ <em>DOM-based Cross-Site Scripting (XSS)</em> หากมีการแก้ไขข้อมูลในอนาคต จึงเปลี่ยนมาใช้ <code>document.createElement</code> และ <code>textContent</code> ทั้งหมด
-        </div>
-        <div class="sec-item">
-          <strong>2. เพิ่ม Content Security Policy (CSP) และ Referrer Policy</strong>
-          เหตุผล: เพิ่ม <code>&lt;meta http-equiv="Content-Security-Policy"&gt;</code> เพื่อจำกัดแหล่งที่มาของสคริปต์ ป้องกันการฝังสคริปต์แปลกปลอมจากภายนอก และกำหนด <code>referrer="no-referrer"</code> เพื่อรักษาความเป็นส่วนตัวของผู้เข้าชมเว็บไซต์
-        </div>
-        <div class="sec-item">
-          <strong>3. เพิ่ม Input Validation &amp; Sanitization และ Object.freeze()</strong>
-          เหตุผล: เพิ่มการตรวจสอบค่าจาก <code>input[type="range"]</code> และ <code>select</code> ด้วยการจำกัดขอบเขตตัวเลข (Clamping) และตรวจสอบรายการที่อนุญาต (Allowlist) พร้อมล็อกข้อมูลด้วย <code>Object.freeze()</code> เพื่อป้องกันการแก้ไขข้อมูลผ่าน DevTools Console (Prototype/Data Tampering)
-        </div>
-        <div class="sec-item">
-          <strong>4. ย้าย Inline Styles เข้าสู่ CSS Classes และระบุ type="button"</strong>
-          เหตุผล: ลบแอตทริบิวต์ <code>style="..."</code> ที่กระจายอยู่ใน HTML และ JS ออกทั้งหมดเพื่อให้โค้ดสะอาด รองรับมาตรฐาน CSP ที่เข้มงวด และระบุ <code>type="button"</code> ในปุ่มทั้งหมดเพื่อป้องกันพฤติกรรม Default Submit ที่ไม่พึงประสงค์
-        </div>
-      </div>
-    </section>
-
     <footer>
       <p>เอกสารวิเคราะห์เชิงวิชาการฉบับนี้จัดทำขึ้นด้วยความเป็นกลาง โดยอ้างอิงจากร่างพระราชบัญญัติประกันสังคม ฉบับกระทรวงแรงงาน และเอกสารรับฟังความคิดเห็นตามมาตรา 77 ของรัฐธรรมนูญ (รหัส 579) เสนอโดยพรรคประชาชน</p>
     </footer>
@@ -1107,7 +1031,6 @@
         tabBtns.forEach(function(btn) {
           btn.addEventListener('click', function() {
             var targetId = btn.getAttribute('data-tab');
-            // [Security Fix] Allowlist check for tab IDs
             if (allowedTabs.indexOf(targetId) === -1) return;
 
             tabBtns.forEach(function(b) {
@@ -1127,7 +1050,7 @@
           });
         });
 
-        // 2. Age Bracket Analysis Data (Immutable via Object.freeze to prevent tampering)
+        // 2. Age Bracket Analysis Data (Immutable via Object.freeze)
         var ageBrackets = Object.freeze({
           '20-30': {
             heading: 'ช่วงอายุ 20–30 ปี (วัยเริ่มต้นทำงาน / ย้ายงานบ่อย / แรงงานยุคดิจิทัล)',
@@ -1212,7 +1135,12 @@
         var ageBtns = document.querySelectorAll('.age-card-btn');
         var ageDetailView = document.getElementById('ageDetailView');
 
-        // [Security Fix] Safe DOM creation helper to eliminate .innerHTML XSS risks
+        function clearElement(el) {
+          while (el.firstChild) {
+            el.removeChild(el.firstChild);
+          }
+        }
+
         function createPolicyListCard(badgeText, badgeClass, cardClass, pointsArray) {
           var card = document.createElement('div');
           card.className = 'pastel-subcard ' + cardClass;
@@ -1239,8 +1167,7 @@
           if (!Object.prototype.hasOwnProperty.call(ageBrackets, key)) return;
           var data = ageBrackets[key];
 
-          // Clear existing content safely
-          ageDetailView.replaceChildren();
+          clearElement(ageDetailView);
 
           var heading = document.createElement('h3');
           heading.className = 'age-detail-heading';
@@ -1291,7 +1218,7 @@
 
         renderAgeBracket('20-30');
 
-        // 3. Monthly Contribution Simulator (Safe DOM manipulation & strict input clamping)
+        // 3. Monthly Contribution Simulator
         var salarySlider = document.getElementById('salarySlider');
         var salaryDisplay = document.getElementById('salaryDisplay');
         var articleSelect = document.getElementById('articleSelect');
@@ -1326,7 +1253,6 @@
         }
 
         function renderSimulator() {
-          // [Security Fix] Validate and clamp numeric input
           var rawSalary = parseInt(salarySlider.value, 10);
           var salary = Number.isFinite(rawSalary) ? Math.min(Math.max(rawSalary, 5000), 50000) : 25000;
 
@@ -1334,7 +1260,7 @@
           var article = allowedArticles.indexOf(rawArticle) !== -1 ? rawArticle : 'm33';
 
           salaryDisplay.textContent = formatCurrency(salary) + ' บาท';
-          simOutput.replaceChildren();
+          clearElement(simOutput);
 
           if (article === 'm33') {
             var baseNow = Math.min(Math.max(salary, 1650), 15000);
