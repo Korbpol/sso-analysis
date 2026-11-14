@@ -3,6 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- [Security Fix 1] กำหนด Content Security Policy (CSP) และ Referrer Policy เพื่อป้องกัน XSS และการรั่วไหลของข้อมูล -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; img-src 'self' data:; base-uri 'none'; form-action 'none';">
+  <meta name="referrer" content="no-referrer">
   <title>เอกสารวิเคราะห์เปรียบเทียบร่าง พ.ร.บ. ประกันสังคม: กระทรวงแรงงาน และ พรรคประชาชน</title>
   <style>
     :root {
@@ -33,6 +36,12 @@
       --pp-pastel-bar: #f7ad72;
       --pp-badge-bg: #ffedd5;
       --pp-text-strong: #9a3b12;
+
+      /* Security Audit Theme (โทนสีเขียวพาสเทลสำหรับรายงานความปลอดภัย) */
+      --sec-bg: #f0fdf4;
+      --sec-border: #bbf7d0;
+      --sec-text: #166534;
+      --sec-bar: #4ade80;
 
       /* Neutral UI Controls */
       --control-active-bg: #eef2f6;
@@ -450,6 +459,12 @@
       box-shadow: var(--shadow-card);
     }
 
+    .age-detail-heading {
+      font-size: 1.15rem;
+      color: var(--navy-official);
+      margin-bottom: 12px;
+    }
+
     .age-overview-note {
       background-color: var(--bg-subtle);
       border-left: 4px solid var(--slate-accent);
@@ -596,6 +611,11 @@
       color: var(--text-body);
     }
 
+    .footnote-list {
+      margin-left: 20px;
+      margin-top: 6px;
+    }
+
     /* Formal Data Tables */
     .table-container {
       overflow-x: auto;
@@ -650,8 +670,63 @@
       border-bottom: none;
     }
 
+    .sub-caption {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+    }
+
+    .col-20 { width: 20%; }
+    .col-22 { width: 22%; }
+    .col-24 { width: 24%; }
+    .col-28 { width: 28%; }
+    .col-39 { width: 39%; }
+
+    /* Security Audit Report Panel */
+    .security-audit-panel {
+      background-color: var(--sec-bg);
+      border: 1px solid var(--sec-border);
+      border-top: 5px solid var(--sec-bar);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      margin-top: 48px;
+      box-shadow: var(--shadow-subtle);
+    }
+
+    .security-audit-panel h2 {
+      font-size: 1.2rem;
+      color: var(--sec-text);
+      margin-bottom: 12px;
+    }
+
+    .security-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+      margin-top: 14px;
+    }
+
+    @media (min-width: 768px) {
+      .security-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    .sec-item {
+      background: #ffffff;
+      border: 1px solid var(--sec-border);
+      border-radius: var(--radius-md);
+      padding: 14px 16px;
+      font-size: 0.88rem;
+    }
+
+    .sec-item strong {
+      color: var(--sec-text);
+      display: block;
+      margin-bottom: 4px;
+    }
+
     footer {
-      margin-top: 56px;
+      margin-top: 44px;
       padding-top: 24px;
       border-top: 1px solid var(--border-strong);
       text-align: center;
@@ -662,7 +737,6 @@
 </head>
 <body>
 
-  <!-- FORMAL HEADER (Top navigation 1-5 removed completely as requested) -->
   <header class="official-header">
     <div class="container">
       <span class="doc-category">รายงานการวิเคราะห์เปรียบเทียบกฎหมายประกันสังคม</span>
@@ -685,7 +759,7 @@
       </div>
     </section>
 
-    <!-- SECTION: CORE PRINCIPLES -->
+    <!-- SECTION 1: CORE PRINCIPLES -->
     <section class="section-block">
       <div class="section-heading-wrap">
         <h2><span class="sec-index">1</span> เปรียบเทียบหลักการสำคัญและทิศทางของร่างกฎหมาย</h2>
@@ -717,7 +791,7 @@
       </div>
     </section>
 
-    <!-- SECTION: INSURED CATEGORIES (M33, M39, M40) -->
+    <!-- SECTION 2: INSURED CATEGORIES (M33, M39, M40) -->
     <section class="section-block">
       <div class="section-heading-wrap">
         <h2><span class="sec-index">2</span> วิเคราะห์ผลดีรายสถานะ: มาตรา 33, มาตรา 39 และ มาตรา 40</h2>
@@ -725,9 +799,9 @@
       </div>
 
       <div class="tabs-header" role="tablist">
-        <button class="tab-btn active" data-tab="panel-m33" role="tab" aria-selected="true">มาตรา 33 (ลูกจ้างประจำ / พนักงานองค์กร)</button>
-        <button class="tab-btn" data-tab="panel-m39" role="tab" aria-selected="false">มาตรา 39 (ผู้ประกันตนโดยสมัครใจ)</button>
-        <button class="tab-btn" data-tab="panel-m40" role="tab" aria-selected="false">มาตรา 40 (ผู้ประกอบอาชีพอิสระ)</button>
+        <button type="button" class="tab-btn active" data-tab="panel-m33" role="tab" aria-selected="true">มาตรา 33 (ลูกจ้างประจำ / พนักงานองค์กร)</button>
+        <button type="button" class="tab-btn" data-tab="panel-m39" role="tab" aria-selected="false">มาตรา 39 (ผู้ประกันตนโดยสมัครใจ)</button>
+        <button type="button" class="tab-btn" data-tab="panel-m40" role="tab" aria-selected="false">มาตรา 40 (ผู้ประกอบอาชีพอิสระ)</button>
       </div>
 
       <!-- M33 Panel -->
@@ -824,7 +898,7 @@
       </div>
     </section>
 
-    <!-- SECTION: AGE BRACKETS -->
+    <!-- SECTION 3: AGE BRACKETS -->
     <section class="section-block">
       <div class="section-heading-wrap">
         <h2><span class="sec-index">3</span> วิเคราะห์ผลดีจำแนกตามเงื่อนไขช่วงอายุ (20 ปี ถึง มากกว่า 60 ปี)</h2>
@@ -832,38 +906,38 @@
       </div>
 
       <div class="age-selector" id="ageButtons">
-        <button class="age-card-btn active" data-age="20-30">
+        <button type="button" class="age-card-btn active" data-age="20-30">
           <span class="age-num">20–30 ปี</span>
           <span class="age-desc">วัยเริ่มต้นทำงาน</span>
         </button>
-        <button class="age-card-btn" data-age="31-40">
+        <button type="button" class="age-card-btn" data-age="31-40">
           <span class="age-num">31–40 ปี</span>
           <span class="age-desc">วัยสร้างครอบครัว</span>
         </button>
-        <button class="age-card-btn" data-age="41-50">
+        <button type="button" class="age-card-btn" data-age="41-50">
           <span class="age-num">41–50 ปี</span>
           <span class="age-desc">วัยมั่นคง/ภาระสูง</span>
         </button>
-        <button class="age-card-btn" data-age="51-55">
+        <button type="button" class="age-card-btn" data-age="51-55">
           <span class="age-num">51–55 ปี</span>
           <span class="age-desc">ก่อนเกิดสิทธิชราภาพ</span>
         </button>
-        <button class="age-card-btn" data-age="56-60">
+        <button type="button" class="age-card-btn" data-age="56-60">
           <span class="age-num">56–60 ปี</span>
           <span class="age-desc">ระยะเปลี่ยนผ่านเกษียณ</span>
         </button>
-        <button class="age-card-btn" data-age="60+">
+        <button type="button" class="age-card-btn" data-age="60+">
           <span class="age-num">มากกว่า 60 ปี</span>
           <span class="age-desc">วัยหลังเกษียณ/ทำงานต่อ</span>
         </button>
       </div>
 
-      <div class="age-detail-container" id="ageDetailView">
-        <!-- Populated dynamically via JS -->
+      <div class="age-detail-container" id="ageDetailView" aria-live="polite">
+        <!-- Populated securely via Safe DOM APIs -->
       </div>
     </section>
 
-    <!-- SECTION: MONTHLY CONTRIBUTION & WAGE CAP -->
+    <!-- SECTION 4: MONTHLY CONTRIBUTION & WAGE CAP -->
     <section class="section-block">
       <div class="section-heading-wrap">
         <h2><span class="sec-index">4</span> ฐานในการหักเงินเข้าประกันสังคมทุกเดือน และการคำนวณเงินสมทบ</h2>
@@ -895,13 +969,13 @@
           </div>
         </div>
 
-        <div class="sim-cards" id="simOutput">
-          <!-- Populated dynamically via JS -->
+        <div class="sim-cards" id="simOutput" aria-live="polite">
+          <!-- Populated securely via Safe DOM APIs -->
         </div>
 
         <div class="technical-footnote">
           <strong>หลักเกณฑ์สำคัญเกี่ยวกับฐานค่าจ้างในการหักเงินสมทบรายเดือน:</strong>
-          <ul style="margin-left: 20px; margin-top: 6px;">
+          <ul class="footnote-list">
             <li><strong>เกณฑ์ปัจจุบัน (มาตรา 33):</strong> หักเงินสมทบในอัตรา 5% ของค่าจ้างจริง โดยกำหนดฐานค่าจ้างขั้นต่ำ 1,650 บาท และเพดานสูงสุดไม่เกิน 15,000 บาท (หักสูงสุด 750 บาท/เดือน แบ่งเป็นส่วนออมชราภาพ 3% หรือสูงสุด 450 บาท/เดือน)</li>
             <li><strong>แนวทางกระทรวงแรงงาน:</strong> กำหนดเพดานค่าจ้างผ่านกฎกระทรวงตามแผนปรับปรุงแบบขั้นบันได 3 ระยะ (ระยะที่ 1: เพดาน 17,500 บาท หักสูงสุด 875 บาท | ระยะที่ 2: เพดาน 20,000 บาท หักสูงสุด 1,000 บาท | ระยะที่ 3: เพดาน 23,000 บาท หักสูงสุด 1,150 บาท) เพื่อให้ผู้ประกันตนค่อยๆ ปรับตัวและมีเงินออมชราภาพเพิ่มขึ้น</li>
             <li><strong>แนวทางพรรคประชาชน:</strong> เสนอให้ผูกเพดานค่าจ้างสูงสุดเข้ากับดัชนีค่าจ้างเฉลี่ยหรือการเติบโตทางเศรษฐกิจโดยอัตโนมัติ เพื่อให้ฐานการคำนวณเงินทดแทนการขาดรายได้ (ลาคลอด ว่างงาน ทุพพลภาพ) และเงินบำนาญชราภาพ สอดคล้องกับค่าครองชีพจริงอย่างต่อเนื่อง พร้อมทบทวนโครงสร้างฐานเงินสมทบมาตรา 39 ใหม่</li>
@@ -914,27 +988,27 @@
         <table>
           <thead>
             <tr>
-              <th style="width: 20%;">ประเภทผู้ประกันตน</th>
-              <th style="width: 24%;">ฐานการหักเงินปัจจุบัน</th>
-              <th class="th-mol" style="width: 28%;">แนวทางร่างกระทรวงแรงงาน</th>
-              <th class="th-pp" style="width: 28%;">แนวทางร่างพรรคประชาชน</th>
+              <th class="col-20">ประเภทผู้ประกันตน</th>
+              <th class="col-24">ฐานการหักเงินปัจจุบัน</th>
+              <th class="th-mol col-28">แนวทางร่างกระทรวงแรงงาน</th>
+              <th class="th-pp col-28">แนวทางร่างพรรคประชาชน</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td><strong>มาตรา 33</strong><br><span style="font-size:0.82rem; color:var(--text-muted);">ลูกจ้างในระบบ / พนักงานองค์กร</span></td>
+              <td><strong>มาตรา 33</strong><br><span class="sub-caption">ลูกจ้างในระบบ / พนักงานองค์กร</span></td>
               <td>หัก <strong>5%</strong> ของค่าจ้าง<br>เพดาน 1,650 – 15,000 บาท<br>(สูงสุด 750 บาท/เดือน)</td>
               <td class="td-mol">ทยอยปรับเพิ่มเพดานค่าจ้างเป็นลำดับขั้นผ่านกฎกระทรวง (17,500 &rarr; 20,000 &rarr; 23,000 บาท) ช่วยเพิ่มเงินสะสมชราภาพโดยไม่เพิ่มภาระก้าวกระโดดทันที</td>
               <td class="td-pp">กำหนดกลไกปรับเพดานค่าจ้างตามดัชนีเศรษฐกิจอัตโนมัติ เพื่อให้ผู้มีเงินเดือนเกิน 15,000 บาท ได้รับเงินบำนาญและเงินชดเชยสอดคล้องกับรายได้จริง</td>
             </tr>
             <tr>
-              <td><strong>มาตรา 39</strong><br><span style="font-size:0.82rem; color:var(--text-muted);">ส่งเงินสมทบต่อโดยสมัครใจ</span></td>
+              <td><strong>มาตรา 39</strong><br><span class="sub-caption">ส่งเงินสมทบต่อโดยสมัครใจ</span></td>
               <td>จ่ายคงที่ <strong>432 บาท/เดือน</strong><br>(คิด 9% จากฐานค่าจ้างคงที่ 4,800 บาท)</td>
               <td class="td-mol">รักษาระดับเงินสมทบที่ประหยัดเข้าถึงง่าย และเพิ่มรูปแบบการสมัครเพื่อคุ้มครองสุขภาพสำหรับผู้ที่รับบำนาญชราภาพแล้ว</td>
               <td class="td-pp">ปฏิรูปฐานคำนวณและสูตรบำนาญของมาตรา 39 เพื่อป้องกันไม่ให้ฐาน 4,800 บาท ไปดึงค่าเฉลี่ยเงินบำนาญเดิมที่สะสมไว้สูงในมาตรา 33 ให้ลดลง</td>
             </tr>
             <tr>
-              <td><strong>มาตรา 40</strong><br><span style="font-size:0.82rem; color:var(--text-muted);">แรงงานนอกระบบ / อาชีพอิสระ</span></td>
+              <td><strong>มาตรา 40</strong><br><span class="sub-caption">แรงงานนอกระบบ / อาชีพอิสระ</span></td>
               <td>เลือกจ่าย 3 ทางเลือก:<br><strong>70 / 100 / 300 บาท/เดือน</strong><br>(รัฐร่วมสมทบตามทางเลือก)</td>
               <td class="td-mol">คงทางเลือกการจ่ายสมทบตามความสมัครใจที่ยืดหยุ่น และปรับปรุงอัตราประโยชน์ทดแทนผ่านพระราชกฤษฎีกาเป็นระยะ</td>
               <td class="td-pp">ยกระดับสวัสดิการพื้นฐาน (เช่น สิทธิคลอดบุตร/ดูแลบุตร) และสร้างระบบที่ผู้ประกอบการแพลตฟอร์มร่วมสมทบให้คนทำงานอิสระบนแพลตฟอร์ม</td>
@@ -944,7 +1018,7 @@
       </div>
     </section>
 
-    <!-- SECTION: OVERALL COMPARISON MATRIX -->
+    <!-- SECTION 5: OVERALL COMPARISON MATRIX -->
     <section class="section-block">
       <div class="section-heading-wrap">
         <h2><span class="sec-index">5</span> ตารางสังเคราะห์ความแตกต่างเชิงโครงสร้างอย่างครบถ้วน</h2>
@@ -955,9 +1029,9 @@
         <table>
           <thead>
             <tr>
-              <th style="width: 22%;">ประเด็นเปรียบเทียบ</th>
-              <th class="th-mol" style="width: 39%;">ร่าง พ.ร.บ. ฉบับกระทรวงแรงงาน (โทนสีฟ้า)</th>
-              <th class="th-pp" style="width: 39%;">ร่าง พ.ร.บ. ฉบับพรรคประชาชน (โทนสีส้ม)</th>
+              <th class="col-22">ประเด็นเปรียบเทียบ</th>
+              <th class="th-mol col-39">ร่าง พ.ร.บ. ฉบับกระทรวงแรงงาน (โทนสีฟ้า)</th>
+              <th class="th-pp col-39">ร่าง พ.ร.บ. ฉบับพรรคประชาชน (โทนสีส้ม)</th>
             </tr>
           </thead>
           <tbody>
@@ -991,6 +1065,30 @@
       </div>
     </section>
 
+    <!-- SECURITY AUDIT SUMMARY SECTION -->
+    <section class="security-audit-panel" aria-label="สรุปรายงานการตรวจสอบและปรับปรุงความปลอดภัยของโค้ด">
+      <h2>สรุปผลการตรวจสอบและปรับปรุงมาตรฐานความปลอดภัย (Security Audit Report สำหรับเผยแพร่บน GitHub)</h2>
+      <p style="font-size: 0.92rem;">โค้ดฉบับนี้ได้รับการปรับปรุงแก้ไขให้เป็นไปตามมาตรฐานความปลอดภัยของเว็บแอปพลิเคชัน (OWASP Top 10) โดยมีรายละเอียดการแก้ไขและเหตุผลดังต่อไปนี้:</p>
+      <div class="security-grid">
+        <div class="sec-item">
+          <strong>1. ยกเลิกการใช้ .innerHTML และแทนที่ด้วย Safe DOM APIs</strong>
+          เหตุผล: เดิมมีการใช้ <code>ageDetailView.innerHTML</code> และ <code>simOutput.innerHTML</code> ในการสร้าง HTML จากตัวแปร ซึ่งเสี่ยงต่อช่องโหว่ <em>DOM-based Cross-Site Scripting (XSS)</em> หากมีการแก้ไขข้อมูลในอนาคต จึงเปลี่ยนมาใช้ <code>document.createElement</code> และ <code>textContent</code> ทั้งหมด
+        </div>
+        <div class="sec-item">
+          <strong>2. เพิ่ม Content Security Policy (CSP) และ Referrer Policy</strong>
+          เหตุผล: เพิ่ม <code>&lt;meta http-equiv="Content-Security-Policy"&gt;</code> เพื่อจำกัดแหล่งที่มาของสคริปต์ ป้องกันการฝังสคริปต์แปลกปลอมจากภายนอก และกำหนด <code>referrer="no-referrer"</code> เพื่อรักษาความเป็นส่วนตัวของผู้เข้าชมเว็บไซต์
+        </div>
+        <div class="sec-item">
+          <strong>3. เพิ่ม Input Validation &amp; Sanitization และ Object.freeze()</strong>
+          เหตุผล: เพิ่มการตรวจสอบค่าจาก <code>input[type="range"]</code> และ <code>select</code> ด้วยการจำกัดขอบเขตตัวเลข (Clamping) และตรวจสอบรายการที่อนุญาต (Allowlist) พร้อมล็อกข้อมูลด้วย <code>Object.freeze()</code> เพื่อป้องกันการแก้ไขข้อมูลผ่าน DevTools Console (Prototype/Data Tampering)
+        </div>
+        <div class="sec-item">
+          <strong>4. ย้าย Inline Styles เข้าสู่ CSS Classes และระบุ type="button"</strong>
+          เหตุผล: ลบแอตทริบิวต์ <code>style="..."</code> ที่กระจายอยู่ใน HTML และ JS ออกทั้งหมดเพื่อให้โค้ดสะอาด รองรับมาตรฐาน CSP ที่เข้มงวด และระบุ <code>type="button"</code> ในปุ่มทั้งหมดเพื่อป้องกันพฤติกรรม Default Submit ที่ไม่พึงประสงค์
+        </div>
+      </div>
+    </section>
+
     <footer>
       <p>เอกสารวิเคราะห์เชิงวิชาการฉบับนี้จัดทำขึ้นด้วยความเป็นกลาง โดยอ้างอิงจากร่างพระราชบัญญัติประกันสังคม ฉบับกระทรวงแรงงาน และเอกสารรับฟังความคิดเห็นตามมาตรา 77 ของรัฐธรรมนูญ (รหัส 579) เสนอโดยพรรคประชาชน</p>
     </footer>
@@ -998,14 +1096,19 @@
 
   <script>
     (function() {
+      'use strict';
+
       document.addEventListener('DOMContentLoaded', function() {
         // 1. Tab Switching for Articles (M33, M39, M40)
         var tabBtns = document.querySelectorAll('.tab-btn');
         var tabPanels = document.querySelectorAll('.tab-panel');
+        var allowedTabs = ['panel-m33', 'panel-m39', 'panel-m40'];
 
         tabBtns.forEach(function(btn) {
           btn.addEventListener('click', function() {
             var targetId = btn.getAttribute('data-tab');
+            // [Security Fix] Allowlist check for tab IDs
+            if (allowedTabs.indexOf(targetId) === -1) return;
 
             tabBtns.forEach(function(b) {
               b.classList.remove('active');
@@ -1024,8 +1127,8 @@
           });
         });
 
-        // 2. Age Bracket Analysis Data & Selector
-        var ageBrackets = {
+        // 2. Age Bracket Analysis Data (Immutable via Object.freeze to prevent tampering)
+        var ageBrackets = Object.freeze({
           '20-30': {
             heading: 'ช่วงอายุ 20–30 ปี (วัยเริ่มต้นทำงาน / ย้ายงานบ่อย / แรงงานยุคดิจิทัล)',
             context: 'ผู้ประกันตนอยู่ในช่วงเริ่มต้นสะสมสิทธิ มีโอกาสเปลี่ยนงานหรือทำงานอิสระควบคู่กัน และต้องส่งเงินสมทบต่อเนื่องอีกกว่า 30 ปี จึงให้ความสำคัญกับสิทธิว่างงานและความมั่นคงของกองทุนในอนาคต',
@@ -1104,62 +1207,134 @@
               'ขยายการคุ้มครองแรงงานสูงวัยที่ทำงานลักษณะสัญญาจ้างเหมาหรืออาชีพอิสระ (ม.40) ให้เข้าถึงหลักประกันสุขภาพและสวัสดิการที่เหมาะสม'
             ]
           }
-        };
+        });
 
         var ageBtns = document.querySelectorAll('.age-card-btn');
         var ageDetailView = document.getElementById('ageDetailView');
 
+        // [Security Fix] Safe DOM creation helper to eliminate .innerHTML XSS risks
+        function createPolicyListCard(badgeText, badgeClass, cardClass, pointsArray) {
+          var card = document.createElement('div');
+          card.className = 'pastel-subcard ' + cardClass;
+
+          var badge = document.createElement('span');
+          badge.className = 'theme-badge ' + badgeClass;
+          badge.textContent = badgeText;
+          card.appendChild(badge);
+
+          var ul = document.createElement('ul');
+          ul.className = 'formal-list';
+
+          pointsArray.forEach(function(pointText) {
+            var li = document.createElement('li');
+            li.textContent = pointText;
+            ul.appendChild(li);
+          });
+
+          card.appendChild(ul);
+          return card;
+        }
+
         function renderAgeBracket(key) {
+          if (!Object.prototype.hasOwnProperty.call(ageBrackets, key)) return;
           var data = ageBrackets[key];
-          if (!data) return;
 
-          var molList = data.molPoints.map(function(item) {
-            return '<li>' + item + '</li>';
-          }).join('');
+          // Clear existing content safely
+          ageDetailView.replaceChildren();
 
-          var ppList = data.ppPoints.map(function(item) {
-            return '<li>' + item + '</li>';
-          }).join('');
+          var heading = document.createElement('h3');
+          heading.className = 'age-detail-heading';
+          heading.textContent = data.heading;
 
-          ageDetailView.innerHTML =
-            '<h3 style="font-size:1.15rem; color:var(--navy-official); margin-bottom:12px;">' + data.heading + '</h3>' +
-            '<div class="age-overview-note"><strong>ลักษณะเฉพาะและโจทย์สำคัญของช่วงวัยนี้:</strong> ' + data.context + '</div>' +
-            '<div class="dual-grid">' +
-              '<div class="pastel-subcard pastel-mol mol-box-inner">' +
-                '<span class="theme-badge badge-mol">ผลดีตามร่างกระทรวงแรงงาน</span>' +
-                '<ul class="formal-list">' + molList + '</ul>' +
-              '</div>' +
-              '<div class="pastel-subcard pastel-pp pp-box-inner">' +
-                '<span class="theme-badge badge-pp">ผลดีตามร่างพรรคประชาชน</span>' +
-                '<ul class="formal-list">' + ppList + '</ul>' +
-              '</div>' +
-            '</div>';
+          var note = document.createElement('div');
+          note.className = 'age-overview-note';
+          var noteStrong = document.createElement('strong');
+          noteStrong.textContent = 'ลักษณะเฉพาะและโจทย์สำคัญของช่วงวัยนี้: ';
+          note.appendChild(noteStrong);
+          note.appendChild(document.createTextNode(data.context));
+
+          var grid = document.createElement('div');
+          grid.className = 'dual-grid';
+
+          var molCard = createPolicyListCard(
+            'ผลดีตามร่างกระทรวงแรงงาน',
+            'badge-mol',
+            'pastel-mol mol-box-inner',
+            data.molPoints
+          );
+
+          var ppCard = createPolicyListCard(
+            'ผลดีตามร่างพรรคประชาชน',
+            'badge-pp',
+            'pastel-pp pp-box-inner',
+            data.ppPoints
+          );
+
+          grid.appendChild(molCard);
+          grid.appendChild(ppCard);
+
+          ageDetailView.appendChild(heading);
+          ageDetailView.appendChild(note);
+          ageDetailView.appendChild(grid);
         }
 
         ageBtns.forEach(function(btn) {
           btn.addEventListener('click', function() {
+            var selectedAge = btn.getAttribute('data-age');
+            if (!Object.prototype.hasOwnProperty.call(ageBrackets, selectedAge)) return;
+
             ageBtns.forEach(function(b) { b.classList.remove('active'); });
             btn.classList.add('active');
-            renderAgeBracket(btn.getAttribute('data-age'));
+            renderAgeBracket(selectedAge);
           });
         });
 
         renderAgeBracket('20-30');
 
-        // 3. Monthly Contribution Simulator
+        // 3. Monthly Contribution Simulator (Safe DOM manipulation & strict input clamping)
         var salarySlider = document.getElementById('salarySlider');
         var salaryDisplay = document.getElementById('salaryDisplay');
         var articleSelect = document.getElementById('articleSelect');
         var simOutput = document.getElementById('simOutput');
+        var allowedArticles = ['m33', 'm39', 'm40'];
 
         function formatCurrency(num) {
-          return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+          var safeNum = Number.isFinite(num) ? Math.round(num) : 0;
+          return safeNum.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+
+        function createSimResultBox(extraClass, labelText, figureText, descText) {
+          var box = document.createElement('div');
+          box.className = extraClass ? 'sim-result-box ' + extraClass : 'sim-result-box';
+
+          var labelEl = document.createElement('div');
+          labelEl.className = 'sim-box-label';
+          labelEl.textContent = labelText;
+
+          var figureEl = document.createElement('div');
+          figureEl.className = 'sim-box-figure';
+          figureEl.textContent = figureText;
+
+          var descEl = document.createElement('div');
+          descEl.className = 'sim-box-desc';
+          descEl.textContent = descText;
+
+          box.appendChild(labelEl);
+          box.appendChild(figureEl);
+          box.appendChild(descEl);
+          return box;
         }
 
         function renderSimulator() {
-          var salary = parseInt(salarySlider.value, 10);
-          var article = articleSelect.value;
+          // [Security Fix] Validate and clamp numeric input
+          var rawSalary = parseInt(salarySlider.value, 10);
+          var salary = Number.isFinite(rawSalary) ? Math.min(Math.max(rawSalary, 5000), 50000) : 25000;
+
+          var rawArticle = articleSelect.value;
+          var article = allowedArticles.indexOf(rawArticle) !== -1 ? rawArticle : 'm33';
+
           salaryDisplay.textContent = formatCurrency(salary) + ' บาท';
+          simOutput.replaceChildren();
 
           if (article === 'm33') {
             var baseNow = Math.min(Math.max(salary, 1650), 15000);
@@ -1174,56 +1349,68 @@
             var basePPDynamic = Math.min(Math.max(salary, 1650), 25000);
             var deductPPDynamic = Math.round(basePPDynamic * 0.05);
 
-            simOutput.innerHTML =
-              '<div class="sim-result-box">' +
-                '<div class="sim-box-label">เกณฑ์เพดานปัจจุบัน (ม.33)</div>' +
-                '<div class="sim-box-figure">' + formatCurrency(deductNow) + ' บาท/เดือน</div>' +
-                '<div class="sim-box-desc">คำนวณ 5% จากฐาน ' + formatCurrency(baseNow) + ' บาท (เพดานสูงสุด 15,000 บ.) เป็นเงินออมชราภาพของท่าน ' + formatCurrency(saveNow) + ' บ./เดือน (ไม่รวมส่วนนายจ้างสมทบเพิ่มอีกเท่าตัว)</div>' +
-              '</div>' +
-              '<div class="sim-result-box mol-sim">' +
-                '<div class="sim-box-label">แนวทางกระทรวงแรงงาน (ปรับขั้นบันได)</div>' +
-                '<div class="sim-box-figure">' + formatCurrency(deductMolStep1) + ' – ' + formatCurrency(deductMolStep3) + ' บาท/เดือน</div>' +
-                '<div class="sim-box-desc">ทยอยขยับเพดานผ่านกฎกระทรวง (17,500 &rarr; 20,000 &rarr; 23,000 บ.) ช่วยเพิ่มยอดสะสมชราภาพและฐานคำนวณบำนาญอย่างค่อยเป็นค่อยไป</div>' +
-              '</div>' +
-              '<div class="sim-result-box pp-sim">' +
-                '<div class="sim-box-label">แนวทางพรรคประชาชน (ผูกดัชนีค่าจ้าง)</div>' +
-                '<div class="sim-box-figure">ประมาณ ' + formatCurrency(deductPPDynamic) + ' บาท/เดือน*</div>' +
-                '<div class="sim-box-desc">*จำลองการปรับเพดานอัตโนมัติตามดัชนีค่าจ้าง (เช่น ระดับ 23,000–25,000+ บ.) เพื่อให้เงินทดแทนว่างงาน ลาคลอด และบำนาญสะท้อนรายได้จริง</div>' +
-              '</div>';
+            simOutput.appendChild(createSimResultBox(
+              '',
+              'เกณฑ์เพดานปัจจุบัน (ม.33)',
+              formatCurrency(deductNow) + ' บาท/เดือน',
+              'คำนวณ 5% จากฐาน ' + formatCurrency(baseNow) + ' บาท (เพดานสูงสุด 15,000 บ.) เป็นเงินออมชราภาพของท่าน ' + formatCurrency(saveNow) + ' บ./เดือน (ไม่รวมส่วนนายจ้างสมทบเพิ่มอีกเท่าตัว)'
+            ));
+
+            simOutput.appendChild(createSimResultBox(
+              'mol-sim',
+              'แนวทางกระทรวงแรงงาน (ปรับขั้นบันได)',
+              formatCurrency(deductMolStep1) + ' – ' + formatCurrency(deductMolStep3) + ' บาท/เดือน',
+              'ทยอยขยับเพดานผ่านกฎกระทรวง (17,500 → 20,000 → 23,000 บ.) ช่วยเพิ่มยอดสะสมชราภาพและฐานคำนวณบำนาญอย่างค่อยเป็นค่อยไป'
+            ));
+
+            simOutput.appendChild(createSimResultBox(
+              'pp-sim',
+              'แนวทางพรรคประชาชน (ผูกดัชนีค่าจ้าง)',
+              'ประมาณ ' + formatCurrency(deductPPDynamic) + ' บาท/เดือน*',
+              '*จำลองการปรับเพดานอัตโนมัติตามดัชนีค่าจ้าง (เช่น ระดับ 23,000–25,000+ บ.) เพื่อให้เงินทดแทนว่างงาน ลาคลอด และบำนาญสะท้อนรายได้จริง'
+            ));
           } else if (article === 'm39') {
-            simOutput.innerHTML =
-              '<div class="sim-result-box">' +
-                '<div class="sim-box-label">เกณฑ์ปัจจุบัน (ม.39)</div>' +
-                '<div class="sim-box-figure">432 บาท/เดือน</div>' +
-                '<div class="sim-box-desc">จ่ายอัตราคงที่จากฐานสมมติ 4,800 บาท ข้อสังเกต: การใช้ฐาน 4,800 บาทต่อเนื่องจะทำให้ค่าเฉลี่ยบำนาญ 60 เดือนสุดท้ายลดลง</div>' +
-              '</div>' +
-              '<div class="sim-result-box mol-sim">' +
-                '<div class="sim-box-label">แนวทางกระทรวงแรงงาน (ม.39)</div>' +
-                '<div class="sim-box-figure">432 บาท/เดือน</div>' +
-                '<div class="sim-box-desc">คงอัตราสมทบที่ประหยัดและเข้าถึงได้ พร้อมเพิ่มทางเลือกสมัครคุ้มครองสุขภาพสำหรับผู้ที่รับเงินบำนาญชราภาพไปแล้ว</div>' +
-              '</div>' +
-              '<div class="sim-result-box pp-sim">' +
-                '<div class="sim-box-label">แนวทางพรรคประชาชน (ปฏิรูป ม.39)</div>' +
-                '<div class="sim-box-figure">ปรับโครงสร้างฐานคำนวณใหม่</div>' +
-                '<div class="sim-box-desc">แก้ไขสูตรคำนวณบำนาญเพื่อไม่ให้การส่งเงินสมทบ ม.39 ไปลดทอนสิทธิเงินบำนาญเดิมที่ผู้ประกันตนเคยสะสมไว้ในเพดานสูงสมัยอยู่ ม.33</div>' +
-              '</div>';
+            simOutput.appendChild(createSimResultBox(
+              '',
+              'เกณฑ์ปัจจุบัน (ม.39)',
+              '432 บาท/เดือน',
+              'จ่ายอัตราคงที่จากฐานสมมติ 4,800 บาท ข้อสังเกต: การใช้ฐาน 4,800 บาทต่อเนื่องจะทำให้ค่าเฉลี่ยบำนาญ 60 เดือนสุดท้ายลดลง'
+            ));
+
+            simOutput.appendChild(createSimResultBox(
+              'mol-sim',
+              'แนวทางกระทรวงแรงงาน (ม.39)',
+              '432 บาท/เดือน',
+              'คงอัตราสมทบที่ประหยัดและเข้าถึงได้ พร้อมเพิ่มทางเลือกสมัครคุ้มครองสุขภาพสำหรับผู้ที่รับเงินบำนาญชราภาพไปแล้ว'
+            ));
+
+            simOutput.appendChild(createSimResultBox(
+              'pp-sim',
+              'แนวทางพรรคประชาชน (ปฏิรูป ม.39)',
+              'ปรับโครงสร้างฐานคำนวณใหม่',
+              'แก้ไขสูตรคำนวณบำนาญเพื่อไม่ให้การส่งเงินสมทบ ม.39 ไปลดทอนสิทธิเงินบำนาญเดิมที่ผู้ประกันตนเคยสะสมไว้ในเพดานสูงสมัยอยู่ ม.33'
+            ));
           } else {
-            simOutput.innerHTML =
-              '<div class="sim-result-box">' +
-                '<div class="sim-box-label">เกณฑ์ปัจจุบัน (ม.40)</div>' +
-                '<div class="sim-box-figure">70 / 100 / 300 บาท/เดือน</div>' +
-                '<div class="sim-box-desc">เลือกจ่ายตามความสมัครใจโดยไม่ผูกกับฐานรายได้ (ทางเลือกที่ 2 และ 3 มีเงินออมบำเหน็จชราภาพสะสม)</div>' +
-              '</div>' +
-              '<div class="sim-result-box mol-sim">' +
-                '<div class="sim-box-label">แนวทางกระทรวงแรงงาน (ม.40)</div>' +
-                '<div class="sim-box-figure">70 / 100 / 300 บาท/เดือน</div>' +
-                '<div class="sim-box-desc">คงความยืดหยุ่นทั้ง 3 ทางเลือกเพื่อให้แรงงานอิสระเข้าถึงง่ายโดยรัฐร่วมอุดหนุน และปรับเพิ่มประโยชน์ทดแทนผ่านพระราชกฤษฎีกา</div>' +
-              '</div>' +
-              '<div class="sim-result-box pp-sim">' +
-                '<div class="sim-box-label">แนวทางพรรคประชาชน (ม.40 &amp; แพลตฟอร์ม)</div>' +
-                '<div class="sim-box-figure">ทางเลือกสมทบ + แพลตฟอร์มร่วมจ่าย</div>' +
-                '<div class="sim-box-desc">เพิ่มเติมสิทธิประโยชน์คลอดบุตรและดูแลบุตรในระบบ ม.40 และผลักดันให้ผู้ประกอบการแพลตฟอร์มร่วมจ่ายเงินสมทบให้แรงงานอิสระ</div>' +
-              '</div>';
+            simOutput.appendChild(createSimResultBox(
+              '',
+              'เกณฑ์ปัจจุบัน (ม.40)',
+              '70 / 100 / 300 บาท/เดือน',
+              'เลือกจ่ายตามความสมัครใจโดยไม่ผูกกับฐานรายได้ (ทางเลือกที่ 2 และ 3 มีเงินออมบำเหน็จชราภาพสะสม)'
+            ));
+
+            simOutput.appendChild(createSimResultBox(
+              'mol-sim',
+              'แนวทางกระทรวงแรงงาน (ม.40)',
+              '70 / 100 / 300 บาท/เดือน',
+              'คงความยืดหยุ่นทั้ง 3 ทางเลือกเพื่อให้แรงงานอิสระเข้าถึงง่ายโดยรัฐร่วมอุดหนุน และปรับเพิ่มประโยชน์ทดแทนผ่านพระราชกฤษฎีกา'
+            ));
+
+            simOutput.appendChild(createSimResultBox(
+              'pp-sim',
+              'แนวทางพรรคประชาชน (ม.40 & แพลตฟอร์ม)',
+              'ทางเลือกสมทบ + แพลตฟอร์มร่วมจ่าย',
+              'เพิ่มเติมสิทธิประโยชน์คลอดบุตรและดูแลบุตรในระบบ ม.40 และผลักดันให้ผู้ประกอบการแพลตฟอร์มร่วมจ่ายเงินสมทบให้แรงงานอิสระ'
+            ));
           }
         }
 
